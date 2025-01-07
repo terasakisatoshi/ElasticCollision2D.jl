@@ -6,6 +6,14 @@ A Julia package for simulating and visualizing elastic collisions of multiple ba
 
 This code was generated using the Composer feature in Cursor Editor, with Claude-3-5-Sonnet-20241022 as the underlying model.
 
+## Latest Release (v0.1.1)
+
+The latest version (v0.1.1) includes significant improvements to the physics simulation:
+- Physically accurate elastic collision implementation
+- Fixed collision handling for balls of different sizes
+- Improved position correction using mass ratios
+- Enhanced numerical stability
+
 ## Demo
 
 Running the example script `examples/bouncing_ball.jl` generates an animation of 10 balls with random sizes and velocities colliding elastically within a bounded box:
@@ -28,25 +36,26 @@ Checking if file exists: true
 
 ### Demo Animation
 
-[Download the demo animation](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/download/v0.1.0/bouncing_balls.mp4)
+[Download the demo animation](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/download/v0.1.1/bouncing_balls.mp4)
 
-You can also view it on the [releases page](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/tag/v0.1.0).
+You can also view it on the [releases page](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/tag/v0.1.1).
 
 The generated animation demonstrates:
 - Random initialization of 10 balls with different sizes
-- Elastic collisions between balls
+- Physically accurate elastic collisions between balls
+- Proper handling of collisions between balls of different sizes
 - Wall collisions and reflections
-- Conservation of energy and momentum
-- Smooth motion using Verlet integration
+- Perfect conservation of energy and momentum
+- Mass-dependent collision response
 
 ## Features
 
-- Accurate physics simulation of elastic collisions between balls
-- Collision detection and resolution with walls and other balls
-- Verlet integration for stable numerical simulation
+- Physically accurate elastic collision simulation
+- Precise collision detection and resolution for balls of any size
+- Mass-based collision response with perfect energy conservation
 - Smooth animation output using CairoMakie
 - Configurable simulation parameters (time step, duration, etc.)
-- Support for multiple balls with different sizes
+- Support for multiple balls with different sizes and masses
 
 ## Installation
 
