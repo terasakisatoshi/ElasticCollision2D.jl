@@ -19,7 +19,7 @@ This code was generated using the Composer feature in Cursor Editor, with Claude
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/yourusername/ElasticCollision2D.jl")
+Pkg.add(url="https://github.com/terasakisatoshi/ElasticCollision2D.jl")
 ```
 
 ## Quick Start
