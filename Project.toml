@@ -1,7 +1,7 @@
 name = "ElasticCollision2D"
-uuid = "c7b85308-9d5a-11ee-1d6c-8fb4cbd6f688"
-authors = ["Terasaki <terasaki@example.com>"]
-version = "0.1.1"
+uuid = "f1b8c123-cf56-4f3e-a1e6-e0c7a79c3cc4"
+authors = ["Satoshi Terasaki <terasakisatoshi.math@gmail.com>"]
+version = "0.1.2"
 
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
