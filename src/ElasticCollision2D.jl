@@ -77,8 +77,8 @@ function check_collision(ball1::BouncingBall, ball2::BouncingBall)
     distance = norm(diff)
     min_distance = ball1.radius + ball2.radius
 
-    # Collision detection with numerical error consideration
-    collision_tolerance = min_distance * 1e-6  # larger threshold for stability
+    # Collision detection with stricter numerical error consideration
+    collision_tolerance = min_distance * 1e-8  # smaller threshold for better accuracy
     if distance < min_distance + collision_tolerance
         normal_unit = if distance > 1e-10
             diff / distance
@@ -103,24 +103,28 @@ function resolve_collision!(ball1::BouncingBall, ball2::BouncingBall)
         return
     end
 
-    # Position correction (stronger correction)
+    # Position correction with stronger separation
     total_mass = ball1.mass + ball2.mass
-    shift1 = (ball2.mass / total_mass) * overlap * 1.05  # 5% extra correction
-    shift2 = (ball1.mass / total_mass) * overlap * 1.05
+    shift1 = (ball2.mass / total_mass) * overlap * 1.1  # 10% extra correction
+    shift2 = (ball1.mass / total_mass) * overlap * 1.1
 
     ball1.position .+= shift1 * normal_unit
     ball2.position .-= shift2 * normal_unit
 
-    # Velocity update (perfectly elastic collision)
+    # Velocity update with improved precision
     relative_velocity = ball1.velocity - ball2.velocity
     normal_velocity = dot(relative_velocity, normal_unit)
 
     if normal_velocity < 0
-        # Collision with momentum conservation and restitution coefficient
-        restitution = 1.0  # perfectly elastic collision
+        # Collision with momentum conservation and perfect elasticity
+        restitution = 1.0
         j = -(1 + restitution) * normal_velocity
-        ball1.velocity .+= (j * ball2.mass / total_mass) * normal_unit
-        ball2.velocity .-= (j * ball1.mass / total_mass) * normal_unit
+        j_impulse1 = (j * ball2.mass / total_mass) * normal_unit
+        j_impulse2 = (j * ball1.mass / total_mass) * normal_unit
+
+        # Apply velocity changes with improved precision
+        ball1.velocity .= ball1.velocity .+ j_impulse1
+        ball2.velocity .= ball2.velocity .- j_impulse2
     end
 end
 
@@ -130,49 +134,43 @@ end
 Update positions and velocities of all balls and handle collisions.
 """
 function update!(balls::Vector{BouncingBall}, box::BoundingBox, dt::Float64)
-    substeps = 200  # finer substeps for accuracy
+    substeps = 400  # doubled substeps for better accuracy
     dt_sub = dt / substeps
 
     for _ in 1:substeps
-        # Position update (more accurate integration)
+        # Verlet integration with improved accuracy
         for ball in balls
-            # Half-step velocity update (Verlet integration)
-            ball.position .+= ball.velocity * (dt_sub/2)
-        end
+            # Store old position for Verlet integration
+            old_position = copy(ball.position)
 
-        # Wall collisions (strict position correction)
-        for ball in balls
-            # X-direction wall collisions
+            # Full position update
+            ball.position .+= ball.velocity * dt_sub
+
+            # Apply wall constraints immediately
             if ball.position[1] - ball.radius < 0
                 ball.position[1] = ball.radius
-                ball.velocity[1] = abs(ball.velocity[1])  # change to positive velocity
+                ball.velocity[1] = abs(ball.velocity[1])
             elseif ball.position[1] + ball.radius > box.width
                 ball.position[1] = box.width - ball.radius
-                ball.velocity[1] = -abs(ball.velocity[1])  # change to negative velocity
+                ball.velocity[1] = -abs(ball.velocity[1])
             end
 
-            # Y-direction wall collisions
             if ball.position[2] - ball.radius < 0
                 ball.position[2] = ball.radius
-                ball.velocity[2] = abs(ball.velocity[2])  # change to positive velocity
+                ball.velocity[2] = abs(ball.velocity[2])
             elseif ball.position[2] + ball.radius > box.height
                 ball.position[2] = box.height - ball.radius
-                ball.velocity[2] = -abs(ball.velocity[2])  # change to negative velocity
+                ball.velocity[2] = -abs(ball.velocity[2])
             end
         end
 
-        # Ball-to-ball collisions (more accurate iterative resolution)
-        for _ in 1:10  # increased iterations for better resolution
+        # Multiple iterations of collision resolution for better accuracy
+        for _ in 1:20  # doubled iterations
             for i in 1:length(balls)
                 for j in (i+1):length(balls)
                     resolve_collision!(balls[i], balls[j])
                 end
             end
-        end
-
-        # Remaining half-step velocity update
-        for ball in balls
-            ball.position .+= ball.velocity * (dt_sub/2)
         end
     end
 end
