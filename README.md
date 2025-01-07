@@ -6,6 +6,32 @@ A Julia package for simulating and visualizing elastic collisions of multiple ba
 
 This code was generated using the Composer feature in Cursor Editor, with Claude-3-5-Sonnet-20241022 as the underlying model.
 
+## Demo
+
+Running the example script `examples/bouncing_ball.jl` generates an animation of 10 balls with random sizes and velocities colliding elastically within a bounded box:
+
+```bash
+$ julia --project=. examples/bouncing_ball.jl
+Starting simulation...
+Box created: BoundingBox(10.0, 8.0)
+Created 10 balls
+Creating animation...
+Output file: bouncing_balls.mp4
+Starting animation simulation...
+Number of frames: 1000
+Creating figure...
+Recording animation to: bouncing_balls.mp4
+Animation recording completed!
+Animation completed!
+```
+
+The generated animation demonstrates:
+- Random initialization of 10 balls with different sizes
+- Elastic collisions between balls
+- Wall collisions and reflections
+- Conservation of energy and momentum
+- Smooth motion using Verlet integration
+
 ## Features
 
 - Accurate physics simulation of elastic collisions between balls
