@@ -1,6 +1,6 @@
 # ElasticCollision2D
 
-[![Test](https://github.com/yourusername/ElasticCollision2D.jl/actions/workflows/test.yml/badge.svg)](https://github.com/yourusername/ElasticCollision2D.jl/actions/workflows/test.yml)
+[![CI](https://github.com/terasakisatoshi/ElasticCollision2D.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/terasakisatoshi/ElasticCollision2D.jl/actions/workflows/CI.yml)
 
 A Julia package for simulating and visualizing elastic collisions of multiple balls in 2D space.
 
