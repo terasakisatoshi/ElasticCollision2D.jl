@@ -6,13 +6,17 @@ A Julia package for simulating and visualizing elastic collisions of multiple ba
 
 This code was generated using the Composer feature in Cursor Editor, with Claude-3-5-Sonnet-20241022 as the underlying model.
 
-## Latest Release (v0.1.1)
+## Latest Release (v0.1.2)
 
-The latest version (v0.1.1) includes significant improvements to the physics simulation:
-- Physically accurate elastic collision implementation
-- Fixed collision handling for balls of different sizes
-- Improved position correction using mass ratios
-- Enhanced numerical stability
+The latest version (v0.1.2) includes:
+- Improved version control settings
+  - Added Manifest.toml to .gitignore
+  - Added *.mp4 to .gitignore to exclude animation files
+- All physics improvements from v0.1.1:
+  - Physically accurate elastic collision implementation
+  - Fixed collision handling for balls of different sizes
+  - Improved position correction using mass ratios
+  - Enhanced numerical stability
 
 ## Demo
 
@@ -36,9 +40,9 @@ Checking if file exists: true
 
 ### Demo Animation
 
-[Download the demo animation](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/download/v0.1.1/bouncing_balls.mp4)
+[Download the demo animation](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/download/v0.1.2/bouncing_balls.mp4)
 
-You can also view it on the [releases page](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/tag/v0.1.1).
+You can also view it on the [releases page](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/tag/v0.1.2).
 
 The generated animation demonstrates:
 - Random initialization of 10 balls with different sizes
@@ -104,6 +108,13 @@ The simulation implements:
 - CairoMakie
 - FFMPEG
 - LinearAlgebra
+
+## Development
+
+When developing this package:
+- `Manifest.toml` is excluded from version control
+- Generated animation files (*.mp4) are excluded from version control
+- Use `] dev` to install the package in development mode
 
 ## License
 
