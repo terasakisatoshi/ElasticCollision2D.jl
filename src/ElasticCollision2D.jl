@@ -134,19 +134,18 @@ end
 Update positions and velocities of all balls and handle collisions.
 """
 function update!(balls::Vector{BouncingBall}, box::BoundingBox, dt::Float64)
-    substeps = 400  # doubled substeps for better accuracy
+    substeps = 60  # Balanced number of substeps
     dt_sub = dt / substeps
 
     for _ in 1:substeps
-        # Verlet integration with improved accuracy
+        # Update positions
         for ball in balls
-            # Store old position for Verlet integration
-            old_position = copy(ball.position)
-
-            # Full position update
             ball.position .+= ball.velocity * dt_sub
+        end
 
-            # Apply wall constraints immediately
+        # Wall collisions
+        for ball in balls
+            # Handle horizontal walls
             if ball.position[1] - ball.radius < 0
                 ball.position[1] = ball.radius
                 ball.velocity[1] = abs(ball.velocity[1])
@@ -155,6 +154,7 @@ function update!(balls::Vector{BouncingBall}, box::BoundingBox, dt::Float64)
                 ball.velocity[1] = -abs(ball.velocity[1])
             end
 
+            # Handle vertical walls
             if ball.position[2] - ball.radius < 0
                 ball.position[2] = ball.radius
                 ball.velocity[2] = abs(ball.velocity[2])
@@ -164,11 +164,54 @@ function update!(balls::Vector{BouncingBall}, box::BoundingBox, dt::Float64)
             end
         end
 
-        # Multiple iterations of collision resolution for better accuracy
-        for _ in 1:20  # doubled iterations
-            for i in 1:length(balls)
-                for j in (i+1):length(balls)
-                    resolve_collision!(balls[i], balls[j])
+        # Ball-ball collisions
+        for i in 1:length(balls)
+            for j in (i+1):length(balls)
+                ball1 = balls[i]
+                ball2 = balls[j]
+
+                # Calculate separation vector
+                diff = ball2.position - ball1.position
+                distance = norm(diff)
+                min_distance = ball1.radius + ball2.radius
+
+                # Check for collision
+                if distance < min_distance
+                    # Calculate normal vector
+                    normal = distance > 1e-10 ? diff / distance : [1.0, 0.0]
+
+                    # Position correction to prevent overlap
+                    overlap = min_distance - distance
+                    total_mass = ball1.mass + ball2.mass
+                    mass_ratio1 = ball2.mass / total_mass
+                    mass_ratio2 = ball1.mass / total_mass
+
+                    # Separate balls exactly to contact point
+                    ball1.position .-= normal * overlap * mass_ratio1
+                    ball2.position .+= normal * overlap * mass_ratio2
+
+                    # Calculate velocities in the normal direction
+                    v1 = dot(ball1.velocity, normal)
+                    v2 = dot(ball2.velocity, normal)
+
+                    # Only process collision if balls are approaching
+                    if v1 > v2
+                        # Calculate new velocities using elastic collision formula
+                        m1 = ball1.mass
+                        m2 = ball2.mass
+
+                        # New velocities after elastic collision
+                        v1_new = (m1 - m2)/(m1 + m2) * v1 + (2m2)/(m1 + m2) * v2
+                        v2_new = (2m1)/(m1 + m2) * v1 + (m2 - m1)/(m1 + m2) * v2
+
+                        # Calculate velocity changes
+                        delta_v1 = v1_new - v1
+                        delta_v2 = v2_new - v2
+
+                        # Update velocities by adding the change in the normal direction
+                        ball1.velocity .+= normal * delta_v1
+                        ball2.velocity .+= normal * delta_v2
+                    end
                 end
             end
         end
