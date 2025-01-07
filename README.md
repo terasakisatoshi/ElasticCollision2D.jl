@@ -23,7 +23,14 @@ Creating figure...
 Recording animation to: bouncing_balls.mp4
 Animation recording completed!
 Animation completed!
+Checking if file exists: true
 ```
+
+### Demo Animation
+
+[Download the demo animation](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/download/v0.1.0/bouncing_balls.mp4)
+
+You can also view it on the [releases page](https://github.com/terasakisatoshi/ElasticCollision2D.jl/releases/tag/v0.1.0).
 
 The generated animation demonstrates:
 - Random initialization of 10 balls with different sizes
