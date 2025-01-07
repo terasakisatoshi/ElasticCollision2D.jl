@@ -12,6 +12,9 @@ The latest version (v0.1.2) includes:
 - Improved version control settings
   - Added Manifest.toml to .gitignore
   - Added *.mp4 to .gitignore to exclude animation files
+- Updated documentation
+  - Added development section in README.md
+  - Added demo animation to release assets
 - All physics improvements from v0.1.1:
   - Physically accurate elastic collision implementation
   - Fixed collision handling for balls of different sizes
